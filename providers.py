@@ -2,6 +2,7 @@ import time
 from typing import AsyncGenerator
 
 from dishka import Provider, provide, Scope, provide_all
+from vkbottle.tools.mini_types.bot import MessageMin
 
 from interactors import RequestStr, AppStr, ReqInteractor, AppInteractor
 
@@ -10,9 +11,10 @@ class StrProvider(Provider):
     @provide(scope=Scope.REQUEST)
     async def get_req(
             self,
+            msg: MessageMin,
     ) -> AsyncGenerator[RequestStr, None]:
         print("Scope.REQUEST before")
-        yield f"REQ {time.time()}"
+        yield f"REQ {time.time()} msg_id: {msg.id}"
         print("Scope.REQUEST after")
 
     @provide(scope=Scope.APP)

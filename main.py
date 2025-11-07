@@ -6,7 +6,7 @@ from vkbottle.bot import Bot
 
 from handlers import example_labeler, setup_labelers
 from providers import StrProvider, InteractorProvider
-from vk_dishka import setup_dishka
+from vk_dishka import setup_dishka, VkbottleProvider
 
 
 async def startup_task() -> None:
@@ -22,7 +22,11 @@ def main() -> None:
     load_dotenv()
     token = os.environ.get('TOKEN')
     bot = Bot(token=token)
-    container = make_async_container(StrProvider(), InteractorProvider())
+    container = make_async_container(
+        StrProvider(),
+        InteractorProvider(),
+        VkbottleProvider(),
+    )
     setup_labelers(bot, [example_labeler])
     setup_dishka(container, bot)
     bot.loop_wrapper.on_startup.append(startup_task())
