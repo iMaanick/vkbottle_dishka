@@ -1,7 +1,7 @@
 from inspect import signature, Parameter
 from typing import ParamSpec, TypeVar, Final, Callable, Any, cast
 
-from dishka import AsyncContainer
+from dishka import AsyncContainer, Provider, from_context, Scope
 from dishka.integrations.base import wrap_injection
 from vkbottle import BaseMiddleware, Bot
 from vkbottle.bot import Message
@@ -44,6 +44,10 @@ def inject(func: Callable[P, T]) -> Callable[P, T]:
         additional_params=additional_params,
         container_getter=container_getter,
     )
+
+
+class VkbottleProvider(Provider):
+    message = from_context(MessageMin, scope=Scope.REQUEST)
 
 
 class ContainerMiddleware(BaseMiddleware[Message]):  # type: ignore[misc]

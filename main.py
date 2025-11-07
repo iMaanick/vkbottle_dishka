@@ -1,4 +1,7 @@
+import os
+
 from dishka import make_async_container, AsyncContainer
+from dotenv import load_dotenv
 from vkbottle.bot import Bot
 
 from handlers import example_labeler, setup_labelers
@@ -16,7 +19,8 @@ async def shutdown_task(container: AsyncContainer) -> None:
 
 
 def main() -> None:
-    token = ""
+    load_dotenv()
+    token = os.environ.get('TOKEN')
     bot = Bot(token=token)
     container = make_async_container(StrProvider(), InteractorProvider())
     setup_labelers(bot, [example_labeler])
