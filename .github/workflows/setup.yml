@@ -27,12 +27,12 @@ jobs:
 
       - name: Run ruff
         run: |
-          uv ruff check
+          uv run ruff check
 
       - name: Run mypy
         run: |
-          uv mypy src
+          uv run mypy src
 
       - name: Run tests
         run: |
-          uv nox -t ci
+          uv run nox -t ci
