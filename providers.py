@@ -14,7 +14,7 @@ class StrProvider(Provider):
             msg: MessageMin,
     ) -> AsyncGenerator[RequestStr, None]:
         print("Scope.REQUEST before")
-        yield f"REQ {time.time()} msg_id: {msg.id}"
+        yield RequestStr(f"REQ {time.time()} msg_id: {msg.id}")
         print("Scope.REQUEST after")
 
     @provide(scope=Scope.APP)
@@ -22,7 +22,7 @@ class StrProvider(Provider):
             self,
     ) -> AsyncGenerator[AppStr, None]:
         print("Scope.APP before")
-        yield f"APP {time.time()}"
+        yield AppStr(f"APP {time.time()}")
         print("Scope.APP after")
 
 

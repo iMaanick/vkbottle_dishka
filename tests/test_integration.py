@@ -1,11 +1,11 @@
-import pytest
-from unittest.mock import AsyncMock, Mock
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator, ParamSpec, TypeVar, Callable
+from unittest.mock import Mock
 
-from vkbottle.bot import Bot, Message
-from vkbottle import API
-
+import pytest
 from dishka import make_async_container, FromDishka
+from dishka.provider import BaseProvider
+from vkbottle.bot import Bot, Message
 
 from vk_dishka import inject, setup_dishka
 from .common import (
@@ -14,12 +14,15 @@ from .common import (
     AppDep,
     AppProvider,
     RequestDep,
+    send_event,
 )
-from .test_handlers import make_event
+
+P = ParamSpec("P")
+T = TypeVar("T")
 
 
 @asynccontextmanager
-async def dishka_app(handler, provider):
+async def dishka_app(handler: Callable[P, T], provider: BaseProvider) -> AsyncGenerator[Bot, None]:
     bot = Bot(token="test-token")
     bot.on.message()(inject(handler))
 
@@ -30,33 +33,24 @@ async def dishka_app(handler, provider):
     await container.close()
 
 
-async def send_event(bot: Bot, text: str):
-    event = make_event(text)
-    mock_api = AsyncMock(spec=API)
-    mock_api.messages.send = AsyncMock()
-
-    await bot.router.route(event, mock_api)
-    return mock_api
-
-
 async def handle_with_app(
-    _: Message,
-    a: FromDishka[AppDep],
-    mock: FromDishka[Mock],
+        _: Message,
+        a: FromDishka[AppDep],
+        mock: FromDishka[Mock],
 ) -> None:
     mock(a)
 
 
 async def handle_with_request(
-    _: Message,
-    a: FromDishka[RequestDep],
-    mock: FromDishka[Mock],
+        _: Message,
+        a: FromDishka[RequestDep],
+        mock: FromDishka[Mock],
 ) -> None:
     mock(a)
 
 
 @pytest.mark.asyncio
-async def test_app_dependency(app_provider: AppProvider):
+async def test_app_dependency(app_provider: AppProvider) -> None:
     async with dishka_app(handle_with_app, app_provider) as bot:
         await send_event(bot, "привет")
         app_provider.mock.assert_called_with(APP_DEP_VALUE)
@@ -65,7 +59,7 @@ async def test_app_dependency(app_provider: AppProvider):
 
 
 @pytest.mark.asyncio
-async def test_request_dependency(app_provider: AppProvider):
+async def test_request_dependency(app_provider: AppProvider) -> None:
     async with dishka_app(handle_with_request, app_provider) as bot:
         await send_event(bot, "привет")
         app_provider.mock.assert_called_with(REQUEST_DEP_VALUE)
@@ -73,7 +67,7 @@ async def test_request_dependency(app_provider: AppProvider):
 
 
 @pytest.mark.asyncio
-async def test_request_dependency_twice(app_provider: AppProvider):
+async def test_request_dependency_twice(app_provider: AppProvider) -> None:
     async with dishka_app(handle_with_request, app_provider) as bot:
         await send_event(bot, "привет")
         app_provider.mock.assert_called_with(REQUEST_DEP_VALUE)

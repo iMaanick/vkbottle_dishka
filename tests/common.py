@@ -1,9 +1,11 @@
 from collections.abc import Iterable
-from typing import NewType
-from unittest.mock import Mock
+from typing import NewType, Any
+from unittest.mock import Mock, AsyncMock
 
 from dishka import Provider, Scope, from_context, provide
 from dishka.entities.depends_marker import FromDishka
+from vkbottle import Bot, API
+from vkbottle_types.methods.base_category import BaseCategory
 
 ContextDep = NewType("ContextDep", str)
 UserDep = NewType("UserDep", str)
@@ -92,3 +94,46 @@ class WebSocketAppProvider(Provider):
     @provide(scope=Scope.SESSION)
     def get_mock(self) -> Mock:
         return self.mock
+
+
+async def send_event(bot: Bot, text: str) -> AsyncMock:
+    event = make_event(text)
+
+    mock_api = AsyncMock(spec=API)
+    mock_api.messages.send = AsyncMock()
+    mock_api.messages.get_set_params = BaseCategory.get_set_params
+    await bot.router.route(event, mock_api)
+
+    return mock_api
+
+
+def make_event(text: str) -> dict[str, Any]:
+    return {
+        "type": "message_new",
+        "group_id": 123456789,
+        "object": {
+            "message": {
+                "date": 1699459200,
+                "from_id": 987654321,
+                "id": 456,
+                "out": 0,
+                "peer_id": 987654321,
+                "text": text,
+                "conversation_message_id": 112,
+                "fwd_messages": [],
+                "important": False,
+                "random_id": 0,
+                "attachments": [],
+                "is_hidden": False,
+                "version": 1,
+            },
+            "client_info": {
+                "button_actions": ["text", "vkpay", "open_app", "location", "open_link"],
+                "keyboard": True,
+                "inline_keyboard": True,
+                "carousel": False,
+                "lang_id": 0,
+            },
+        },
+        "event_id": "abcd1234efgh5678",
+    }
