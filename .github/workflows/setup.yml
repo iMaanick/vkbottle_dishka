@@ -34,4 +34,4 @@ jobs:
 
       - name: Run tests
         run: |
-          nox --tag ci
+          uv nox --tag ci
