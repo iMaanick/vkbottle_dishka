@@ -1,11 +1,11 @@
 import pytest
-
 from dishka import (
     AsyncContainer,
     Container,
     make_async_container,
     make_container,
 )
+
 from .common import AppProvider, WebSocketAppProvider
 
 

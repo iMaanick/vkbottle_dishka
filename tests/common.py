@@ -1,10 +1,10 @@
 from collections.abc import Iterable
-from typing import NewType, Any
-from unittest.mock import Mock, AsyncMock
+from typing import Any, NewType
+from unittest.mock import AsyncMock, Mock
 
 from dishka import Provider, Scope, from_context, provide
 from dishka.entities.depends_marker import FromDishka
-from vkbottle import Bot, API
+from vkbottle import API, Bot
 from vkbottle_types.methods.base_category import BaseCategory
 
 ContextDep = NewType("ContextDep", str)
@@ -128,7 +128,13 @@ def make_event(text: str) -> dict[str, Any]:
                 "version": 1,
             },
             "client_info": {
-                "button_actions": ["text", "vkpay", "open_app", "location", "open_link"],
+                "button_actions": [
+                    "text",
+                    "vkpay",
+                    "open_app",
+                    "location",
+                    "open_link",
+                ],
                 "keyboard": True,
                 "inline_keyboard": True,
                 "carousel": False,

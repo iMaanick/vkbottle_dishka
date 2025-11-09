@@ -6,7 +6,6 @@ __pycache__
 htmlcov
 dist
 site
-.coverage*
 coverage.xml
 .netlify
 test.db
@@ -22,3 +21,6 @@ docs.zip
 archive.zip
 .idea/
 .idea/*
+/src/vkbottle_dishka.egg-info/
+/.nox/
+/.coverage

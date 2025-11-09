@@ -4,7 +4,7 @@ from vkbottle.bot import Message
 from vkbottle.framework.labeler import BotLabeler
 
 from interactors import ReqInteractor, AppInteractor
-from vk_dishka import inject
+from src.vkbottle_dishka.vk_dishka import inject
 
 example_labeler = BotLabeler()
 

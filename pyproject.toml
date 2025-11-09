@@ -1,0 +1,44 @@
+[project]
+name = "vkbottle_dishka"
+version = "1.0.0"
+description = "Vkbottle integration for dishka"
+requires-python = ">=3.10"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "iMaanick" }]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+dependencies = [
+    "dishka>=1.4.0",
+    "vkbottle>=4.6.2",
+    "typing_extensions; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+lint = [
+    "ruff",
+    "mypy",
+]
+test = [
+    "nox",
+]
+
+[project.urls]
+"Source" = "https://github.com/iMaanick/vkbottle_dishka"
+"Homepage" = "https://github.com/iMaanick/vkbottle_dishka"
+"Documentation" = "https://github.com/iMaanick/vkbottle_dishka"
+"Bug Tracker" = "https://github.com/iMaanick/vkbottle_dishka/issues"
+
+[build-system]
+requires = ["setuptools>=66.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,7 +1,8 @@
-from inspect import signature, Parameter
-from typing import ParamSpec, TypeVar, Final, Callable, Any, cast
+from collections.abc import Callable
+from inspect import Parameter, signature
+from typing import Any, Final, ParamSpec, TypeVar, cast
 
-from dishka import AsyncContainer, Provider, from_context, Scope
+from dishka import AsyncContainer, Provider, Scope, from_context
 from dishka.integrations.base import wrap_injection
 from vkbottle import BaseMiddleware, Bot
 from vkbottle.bot import Message
@@ -23,19 +24,22 @@ def inject(func: Callable[P, T]) -> Callable[P, T]:
                 name=CONTAINER_NAME,
                 annotation=AsyncContainer,
                 kind=Parameter.KEYWORD_ONLY,
-            )
+            ),
         )
 
-    def container_getter(args: tuple[Any, ...], kwargs: dict[str, Any]) -> AsyncContainer:
+    def container_getter(
+            args: tuple[Any, ...],
+            kwargs: dict[str, Any],
+    ) -> AsyncContainer:
         event = args[0]
         container = getattr(event, f"_{CONTAINER_NAME}", None)
         if container is not None:
             # добавляем в kwargs, чтобы wrap_injection не упал на pop
             kwargs[CONTAINER_NAME] = container
-            return cast(AsyncContainer, container)
+            return cast("AsyncContainer", container)
         raise KeyError(
             f"Container '{CONTAINER_NAME}' not found in event. "
-            "Ensure ContainerMiddleware placed it in event._dishka_container"
+            "Ensure ContainerMiddleware placed it in event._dishka_container",
         )
 
     return wrap_injection(
@@ -62,13 +66,20 @@ class ContainerMiddleware(BaseMiddleware[Message]):  # type: ignore[misc]
         self.container = container
 
     async def pre(self) -> None:
-        dishka_container_wrapper = self.container({type(self.event): self.event})
-        setattr(self.event, f"_{CONTAINER_NAME}_wrapper", dishka_container_wrapper)
+        dishka_container_wrapper = self.container({MessageMin: self.event})
+        setattr(
+            self.event,
+            f"_{CONTAINER_NAME}_wrapper",
+            dishka_container_wrapper,
+        )
         container_instance = await dishka_container_wrapper.__aenter__()
         setattr(self.event, f"_{CONTAINER_NAME}", container_instance)
 
     async def post(self) -> None:
-        dishka_container_wrapper = getattr(self.event, f"_{CONTAINER_NAME}_wrapper")
+        dishka_container_wrapper = getattr(
+            self.event,
+            f"_{CONTAINER_NAME}_wrapper",
+        )
         await dishka_container_wrapper.__aexit__(None, None, None)
 
 
@@ -91,5 +102,5 @@ def setup_dishka(
         bot: Bot,
 ) -> None:
     bot.labeler.message_view.register_middleware(
-        provide_dependencies(container)
+        provide_dependencies(container),
     )

@@ -1,13 +1,14 @@
+from collections.abc import AsyncGenerator, Callable
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, ParamSpec, TypeVar, Callable
+from typing import ParamSpec, TypeVar
 from unittest.mock import Mock
 
 import pytest
-from dishka import make_async_container, FromDishka
+from dishka import FromDishka, make_async_container
 from dishka.provider import BaseProvider
+from src.vkbottle_dishka.vk_dishka import inject, setup_dishka
 from vkbottle.bot import Bot, Message
 
-from vk_dishka import inject, setup_dishka
 from .common import (
     APP_DEP_VALUE,
     REQUEST_DEP_VALUE,
@@ -22,8 +23,11 @@ T = TypeVar("T")
 
 
 @asynccontextmanager
-async def dishka_app(handler: Callable[P, T], provider: BaseProvider) -> AsyncGenerator[Bot, None]:
-    bot = Bot(token="test-token")
+async def dishka_app(
+        handler: Callable[P, T],
+        provider: BaseProvider,
+) -> AsyncGenerator[Bot, None]:
+    bot = Bot(token="")
     bot.on.message()(inject(handler))
 
     container = make_async_container(provider)
