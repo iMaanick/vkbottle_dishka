@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -21,17 +22,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install --system -e ".[lint]"
+          uv pip install --system -e ".[lint,test]"
           uv pip install --system "nox>=2023.12.0"
 
       - name: Run ruff
         run: |
-          ruff check
+          uv ruff check
 
       - name: Run mypy
         run: |
-          mypy src
+          uv mypy src
 
       - name: Run tests
         run: |
-          uv nox --tag ci
+          uv nox -t ci
