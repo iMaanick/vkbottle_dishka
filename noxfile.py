@@ -34,10 +34,10 @@ DISHKA_VERSIONS = ["1.4.0", "1.5.0", "1.6.0", "latest"]
 @nox.session(python=PYTHON_VERSIONS, venv_backend="uv", reuse_venv=True, tags=["ci"])
 @nox.parametrize("vkbottle", VKBOTTLE_VERSIONS)
 @nox.parametrize("dishka", DISHKA_VERSIONS)
-def run_all_tests(session: nox.Session, quart: str, dishka: str) -> None:
+def run_all_tests(session: nox.Session, vkbottle: str, dishka: str) -> None:
     session.install(*TEST_DEPS)
 
-    install_package_version(session, "quart", quart)
+    install_package_version(session, "vkbottle", vkbottle)
     install_package_version(session, "dishka", dishka)
 
     session.install("-e", ".")
