@@ -24,3 +24,4 @@ archive.zip
 /src/vkbottle_dishka.egg-info/
 /.nox/
 /.coverage
+uv.lock

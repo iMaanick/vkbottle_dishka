@@ -6,7 +6,7 @@ from vkbottle.bot import Bot
 
 from handlers import example_labeler, setup_labelers
 from providers import StrProvider, InteractorProvider
-from vkbottle_dishka.vk_dishka import setup_dishka, VkbottleProvider
+from vkbottle_dishka import setup_dishka, VkbottleProvider
 
 
 async def startup_task() -> None:

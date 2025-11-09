@@ -3,12 +3,12 @@ from collections.abc import AsyncGenerator
 import pytest
 import pytest_asyncio
 from dishka import make_async_container
-from examples.handlers import example_labeler, setup_labelers
-from examples.providers import InteractorProvider, StrProvider
-from vkbottle_dishka.vk_dishka import VkbottleProvider, setup_dishka
 from vkbottle.bot import Bot
 
+from examples.handlers import example_labeler, setup_labelers
+from examples.providers import InteractorProvider, StrProvider
 from tests.common import send_event
+from vkbottle_dishka import VkbottleProvider, setup_dishka
 
 
 @pytest_asyncio.fixture(scope="session")

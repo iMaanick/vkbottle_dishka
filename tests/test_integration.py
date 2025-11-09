@@ -8,7 +8,7 @@ from dishka import FromDishka, make_async_container
 from dishka.provider import BaseProvider
 from vkbottle.bot import Bot, Message
 
-from vkbottle_dishka.vk_dishka import inject, setup_dishka
+from vkbottle_dishka import inject, setup_dishka
 from .common import (
     APP_DEP_VALUE,
     REQUEST_DEP_VALUE,
