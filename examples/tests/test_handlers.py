@@ -11,7 +11,7 @@ from tests.common import send_event
 from vkbottle_dishka import VkbottleProvider, setup_dishka
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def vk_test_app() -> AsyncGenerator[Bot, None]:
     bot = Bot(token="")
     container = make_async_container(
