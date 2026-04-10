@@ -13,7 +13,7 @@ classifiers = [
 ]
 dependencies = [
     "dishka>=1.4.0",
-    "vkbottle>=4.6.2",
+    "vkbottle>=4.8.1",
 ]
 
 [project.optional-dependencies]

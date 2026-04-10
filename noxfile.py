@@ -27,7 +27,7 @@ TEST_CMD = [
 ]
 
 PYTHON_VERSIONS = ["3.12", "3.13"]
-VKBOTTLE_VERSIONS = ["4.6.2", "latest"]
+VKBOTTLE_VERSIONS = ["4.8.1", "latest"]
 DISHKA_VERSIONS = ["1.9.1", "latest"]
 
 
