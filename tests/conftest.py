@@ -27,3 +27,7 @@ def async_container(app_provider: AppProvider) -> AsyncContainer:
 @pytest.fixture
 def container(app_provider: AppProvider) -> Container:
     return make_container(app_provider)
+
+@pytest.fixture(params=[False, True], ids=["manual_inject", "auto_inject"])
+def auto_inject(request: pytest.FixtureRequest) -> bool:
+    return request.param  # type: ignore[no-any-return]

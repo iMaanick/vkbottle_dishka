@@ -23,10 +23,6 @@ def inject(func: Callable[P, T]) -> Callable[P, T]:
         args: tuple[Any, ...],
         kwargs: dict[str, Any],
     ) -> AsyncContainer:
-        container = kwargs.get(CONTAINER_NAME)
-        if isinstance(container, AsyncContainer):
-            return container
-
         if args:
             event = args[0]
             if isinstance(event, dict):
@@ -168,17 +164,12 @@ def setup_dishka(
     container: AsyncContainer,
     bot: Bot,
     *,
-    auto_inject: bool | InjectFunc[P, T] = False,
+    auto_inject: bool = False,
 ) -> None:
     middleware = provide_dependencies(container)
     bot.labeler.message_view.register_middleware(middleware)
     bot.labeler.raw_event_view.register_middleware(middleware)
     patch_raw_event_model_factory(bot.labeler.raw_event_view)
 
-    if auto_inject is not False:
-        inject_func: InjectFunc[P, T]
-        if auto_inject is True:
-            inject_func = inject
-        else:
-            inject_func = auto_inject
-        inject_labeler(bot.labeler, inject_func=inject_func)
+    if auto_inject is True:
+        inject_labeler(bot.labeler, inject_func=inject)

@@ -143,3 +143,34 @@ def make_event(text: str) -> dict[str, Any]:
         },
         "event_id": "abcd1234efgh5678",
     }
+
+async def send_raw_event(bot: Bot, raw: dict[str, Any]) -> AsyncMock:
+
+
+    mock_api = AsyncMock(spec=API)
+    mock_api.messages.get_set_params = BaseCategory.get_set_params
+    await bot.router.route(raw, mock_api)
+    return mock_api
+
+
+def make_message_deny_event() -> dict[str, Any]:
+    return {
+        "type": "message_deny",
+        "group_id": 123456789,
+        "object": {
+            "user_id": 987654321,
+        },
+        "event_id": "deny_event_abcd1234",
+    }
+
+
+def make_message_allow_event() -> dict[str, Any]:
+    return {
+        "type": "message_allow",
+        "group_id": 123456789,
+        "object": {
+            "user_id": 987654321,
+            "key": "",
+        },
+        "event_id": "allow_event_efgh5678",
+    }
