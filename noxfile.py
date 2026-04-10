@@ -26,9 +26,9 @@ TEST_CMD = [
     "-v",
 ]
 
-PYTHON_VERSIONS = ["3.10", "3.11", "3.12", "3.13"]
+PYTHON_VERSIONS = ["3.12", "3.13"]
 VKBOTTLE_VERSIONS = ["4.6.2", "latest"]
-DISHKA_VERSIONS = ["1.4.0", "1.5.0", "1.6.0", "latest"]
+DISHKA_VERSIONS = ["1.9.1", "latest"]
 
 
 @nox.session(python=PYTHON_VERSIONS, venv_backend="uv", reuse_venv=True, tags=["ci"])
